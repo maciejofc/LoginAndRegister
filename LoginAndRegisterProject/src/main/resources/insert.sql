@@ -1,0 +1,1 @@
+INSERT INTO `login_and_register`.`users` (`full_name`, `date_of_birth`, `email`, `password`) VALUES ('Jan Kowalski', '1999-12-12', 'email', 'haslo');

@@ -7,10 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-USER PAGE !!!
-<%
-String email = (String) session.getAttribute("userlogin");
-out.println("helloo user with email: "+email);
-%>>
+LOGIN PAGE
+<form action = "login" method ="post">
+USER LOGIN: <input type = "text" name =userlogin> 
+USER PASSWORD: <input type = "text" name =userpassword> 
+<input type="submit" value = "Log in">
+</form>
 </body>
 </html>
