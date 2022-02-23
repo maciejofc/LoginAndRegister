@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class User {
+public class User implements Serializable {
 	Integer id;
 	Role role;
 	String fullName;
@@ -86,6 +87,36 @@ public class User {
 		this.birthday = birthday;
 		this.email = email;
 		this.password = password;
-
 	}
+
+	public User(String fullName, LocalDate birthday, String email, String password, LocalDateTime createdAt,
+			LocalDateTime updatedAt) {
+		
+		this.fullName = fullName;
+		this.birthday = birthday;
+		this.email = email;
+		this.password = password;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("User [fullName=");
+		builder.append(fullName);
+		builder.append(", birthday=");
+		builder.append(birthday);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", password=");
+		builder.append(password);
+		builder.append(", createdAt=");
+		builder.append(createdAt);
+		builder.append(", updatedAt=");
+		builder.append(updatedAt);
+		builder.append("]");
+		return builder.toString();
+	}
+	
 }
