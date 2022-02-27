@@ -10,6 +10,8 @@
 </head>
 <body>
 LOGIN PAGE
+<br>
+
 ${registerSuccess}
 
 <form action = "login" method ="post">
@@ -20,7 +22,7 @@ ${registerSuccess}
 
 <br>
 
-
+${loginFailure}
 <br>
 GO TO REGISTER PAGE
 <a href ="register.jsp">Go to register page</a>

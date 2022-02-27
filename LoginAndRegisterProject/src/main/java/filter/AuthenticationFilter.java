@@ -34,6 +34,7 @@ Logger logger =LogManager.getLogger("AuthenticationFilter");
 		boolean isPageNotNeededToBeAuth = (path.contains("login") || path.contains("register")) || path.contains("error");
 		if (isPageNotNeededToBeAuth) {
 			chain.doFilter(request, response);
+			
 		} else {
 			HttpSession session = httpServletRequest.getSession();
 			// prevent from back button when user want to come back to page that

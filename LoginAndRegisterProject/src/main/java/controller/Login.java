@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
 import javax.servlet.http.HttpServlet;
@@ -13,7 +15,7 @@ import model.User;
 
 public class Login extends HttpServlet {
 	UserDaoImpl userDaoImpl = new UserDaoImpl();
-
+	private static final String INVALID_CREDENTIALS_STATEMENT = "Invalid email or password";
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = null;
@@ -24,9 +26,12 @@ public class Login extends HttpServlet {
 		if (user != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
+			
 			response.sendRedirect("welcome.jsp");
 		} else {
-			response.sendRedirect("login.jsp");
+			request.setAttribute("loginFailure", INVALID_CREDENTIALS_STATEMENT);
+			RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+			rd.include(request, response);
 		}
 
 	}

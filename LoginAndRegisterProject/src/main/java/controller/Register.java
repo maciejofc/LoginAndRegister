@@ -36,6 +36,7 @@ public class Register extends HttpServlet {
 			userDaoImpl.addUser(user);
 			HttpSession session = req.getSession();
 			session.setAttribute("registerSuccess", SUCCESFUL_REGISTER_STATEMENT);
+			session.setMaxInactiveInterval(60);
 			resp.sendRedirect("login.jsp");
 		}
 
