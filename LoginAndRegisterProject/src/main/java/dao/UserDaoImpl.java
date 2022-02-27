@@ -10,6 +10,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import model.User;
 
 public class UserDaoImpl implements UserDao {
@@ -19,7 +22,10 @@ public class UserDaoImpl implements UserDao {
 	private static final String SELECT_USER_AND_CHECK_IF_EXISTS_QUERY = "SELECT * FROM users WHERE email =?";
 	private static final String SELECT_USER_QUERY = "SELECT * from users WHERE email=? AND password =?";
 	private static final String INSERT_USER_QUERY = "INSERT INTO users (full_name, date_of_birth, email, password) VALUES (?,?,?,?)";
-
+	private static final String UPDATE_USER_PASSWORD_QUERY = "UPDATE users SET password = ? WHERE email = ?";
+	
+	Logger logger = LogManager.getLogger("UserDaoImpl");
+	
 	private LocalDateTime toLocalDateTime(String dateTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		return LocalDateTime.parse(dateTime, formatter);
@@ -109,6 +115,22 @@ public class UserDaoImpl implements UserDao {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public void changePassword(String email, String newPassword) {
+		try (Connection con = getConnection();
+				PreparedStatement updateStatement = con.prepareStatement(UPDATE_USER_PASSWORD_QUERY);)
+		{
+			updateStatement.setString(1, newPassword);
+			updateStatement.setString(2, email);
+			int result = updateStatement.executeUpdate();
+			logger.info(result);
+			logger.info(email+" "+newPassword);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

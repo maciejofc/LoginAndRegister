@@ -10,9 +10,7 @@
 </head>
 <body>
 	<%
-	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-	if(session.getAttribute("user") == null)
-		response.sendRedirect("login.jsp");
+	
 	%>
 <!-- 	td- table data -->
 <!-- 	th - header cell -->
@@ -50,5 +48,17 @@
 		</tr>
 		
 	</table>
+	<br>
+	
+Want to change password ?
+<form action = "update" method="post">
+	New password:<input type = "text" name = "newpassword">
+	<br>
+	Confirm new password<input type = "text" name = "new2password">
+	<br>
+	<input type = "submit" value = "Change password">
+	<br>
+	${changeStatement}  
+</form>
 </body>
 </html>

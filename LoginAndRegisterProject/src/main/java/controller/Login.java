@@ -26,7 +26,6 @@ public class Login extends HttpServlet {
 		if (user != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
-			
 			response.sendRedirect("welcome.jsp");
 		} else {
 			request.setAttribute("loginFailure", INVALID_CREDENTIALS_STATEMENT);

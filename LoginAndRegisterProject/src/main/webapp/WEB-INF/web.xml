@@ -47,5 +47,15 @@
    	<url-pattern>/logout</url-pattern>
    </servlet-mapping>
    
+   <servlet>
+   	<servlet-name>updateProfileServlet</servlet-name>
+   	<servlet-class>controller.UpdateProfile</servlet-class>
+   </servlet>
+   
+   <servlet-mapping>
+   	<servlet-name>updateProfileServlet</servlet-name>
+   	<url-pattern>/update</url-pattern>
+   </servlet-mapping>
+   
    
 </web-app>
