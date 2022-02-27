@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    	<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+		<%@ page isELIgnored ="false" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,8 +10,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-REGISTER PAGE: 
+REGISTER PAGE
+<br>
+${errorEmail}
+<br>
 
+
+   
 <form action = "register" method ="post">
 		USER FULL NAME: <input type = "text" name =userfullname><br>
 		USER DATE OF BIRTH: <input type = "date" name =userbirthday><br>

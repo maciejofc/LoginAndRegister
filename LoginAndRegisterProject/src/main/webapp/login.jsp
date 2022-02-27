@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page isELIgnored ="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,8 @@
 </head>
 <body>
 LOGIN PAGE
+${registerSuccess}
+
 <form action = "login" method ="post">
 	USER LOGIN: <input type = "text" name =userlogin> 
 	USER PASSWORD: <input type = "text" name =userpassword> 

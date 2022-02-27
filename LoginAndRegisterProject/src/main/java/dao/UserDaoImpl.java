@@ -16,14 +16,15 @@ public class UserDaoImpl implements UserDao {
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/login_and_register";
 	private static final String DB_USERNAME = "root";
 	private static final String DB_PASSWORD = "mysqlpassword";
+	private static final String SELECT_USER_AND_CHECK_IF_EXISTS_QUERY = "SELECT * FROM users WHERE email =?";
 	private static final String SELECT_USER_QUERY = "SELECT * from users WHERE email=? AND password =?";
 	private static final String INSERT_USER_QUERY = "INSERT INTO users (full_name, date_of_birth, email, password) VALUES (?,?,?,?)";
-	
-	private LocalDateTime toLocalDateTime(String dateTime ) {
+
+	private LocalDateTime toLocalDateTime(String dateTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		return LocalDateTime.parse(dateTime,formatter);
+		return LocalDateTime.parse(dateTime, formatter);
 	}
-	
+
 	private Connection getConnection() {
 		Connection connection = null;
 		try {
@@ -37,9 +38,28 @@ public class UserDaoImpl implements UserDao {
 		return connection;
 	}
 
+	public boolean checkIfUserExists(String email) {
+		boolean result = false;
+		try (Connection con = getConnection();
+				PreparedStatement selectStatement = con.prepareStatement(SELECT_USER_AND_CHECK_IF_EXISTS_QUERY);) {
+			selectStatement.setString(1, email);
+			ResultSet rs = selectStatement.executeQuery();
+			if (rs.next() == false) {
+				result = false;
+			} else {
+				result = true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+
+	}
+
 	@Override
 	public User getUser(String email, String password) {
-		
+
 		User user = null;
 		try (Connection con = getConnection();
 				PreparedStatement selectStatement = con.prepareStatement(SELECT_USER_QUERY);) {
@@ -54,15 +74,14 @@ public class UserDaoImpl implements UserDao {
 			// SQL statement that returns nothing, such as a DDL statement.
 			while (rs.next()) {
 				String fullNameFromQuery = rs.getString("full_name");
-				LocalDate dateOfBirthdayFromQuery =LocalDate.parse(rs.getString("date_of_birth"));
+				LocalDate dateOfBirthdayFromQuery = LocalDate.parse(rs.getString("date_of_birth"));
 				String emailFromQuery = rs.getString("email");
 				String passwordFromQuery = rs.getString("password");
 				LocalDateTime createdAtFromQuery = toLocalDateTime(rs.getString("created_at"));
 				LocalDateTime updatedAtFromQuery = toLocalDateTime(rs.getString("updated_at"));
-				user = new User(fullNameFromQuery,dateOfBirthdayFromQuery,
-						emailFromQuery,passwordFromQuery, createdAtFromQuery,
-						updatedAtFromQuery);
-				
+				user = new User(fullNameFromQuery, dateOfBirthdayFromQuery, emailFromQuery, passwordFromQuery,
+						createdAtFromQuery, updatedAtFromQuery);
+
 			}
 
 		} catch (SQLException e) {
@@ -74,22 +93,22 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public void addUser(User user) {
-		
+		String emailToCheck = user.getEmail();
+
 		try (Connection con = getConnection();
 				PreparedStatement insertStatement = con.prepareStatement(INSERT_USER_QUERY);) {
-				
+
 			insertStatement.setString(1, user.getFullName());
 			insertStatement.setDate(2, java.sql.Date.valueOf(user.getBirthday()));
 			insertStatement.setString(3, user.getEmail());
 			insertStatement.setString(4, user.getPassword());
 			insertStatement.executeUpdate();
-			
+
 		} catch (SQLException e) {
 
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 }
