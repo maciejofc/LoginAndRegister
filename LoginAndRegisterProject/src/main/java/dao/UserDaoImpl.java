@@ -9,10 +9,13 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import model.Role;
 import model.User;
 
 public class UserDaoImpl implements UserDao {
@@ -23,9 +26,9 @@ public class UserDaoImpl implements UserDao {
 	private static final String SELECT_USER_QUERY = "SELECT * from users WHERE email=? AND password =?";
 	private static final String INSERT_USER_QUERY = "INSERT INTO users (full_name, date_of_birth, email, password) VALUES (?,?,?,?)";
 	private static final String UPDATE_USER_PASSWORD_QUERY = "UPDATE users SET password = ? WHERE email = ?";
-	
+	private static final String SELECT_ALL_USERS_QUERY = "SELECT * FROM users";
 	Logger logger = LogManager.getLogger("UserDaoImpl");
-	
+
 	private LocalDateTime toLocalDateTime(String dateTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		return LocalDateTime.parse(dateTime, formatter);
@@ -56,7 +59,7 @@ public class UserDaoImpl implements UserDao {
 				result = true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		return result;
@@ -79,13 +82,14 @@ public class UserDaoImpl implements UserDao {
 			// int executeUpdate(): must be an SQL INSERT, UPDATE or DELETE statement; or an
 			// SQL statement that returns nothing, such as a DDL statement.
 			while (rs.next()) {
+				Role roleFromQuery = Role.valueOf(rs.getString("role"));
 				String fullNameFromQuery = rs.getString("full_name");
 				LocalDate dateOfBirthdayFromQuery = LocalDate.parse(rs.getString("date_of_birth"));
 				String emailFromQuery = rs.getString("email");
 				String passwordFromQuery = rs.getString("password");
 				LocalDateTime createdAtFromQuery = toLocalDateTime(rs.getString("created_at"));
 				LocalDateTime updatedAtFromQuery = toLocalDateTime(rs.getString("updated_at"));
-				user = new User(fullNameFromQuery, dateOfBirthdayFromQuery, emailFromQuery, passwordFromQuery,
+				user = new User(roleFromQuery,fullNameFromQuery, dateOfBirthdayFromQuery, emailFromQuery, passwordFromQuery,
 						createdAtFromQuery, updatedAtFromQuery);
 
 			}
@@ -120,17 +124,42 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public void changePassword(String email, String newPassword) {
 		try (Connection con = getConnection();
-				PreparedStatement updateStatement = con.prepareStatement(UPDATE_USER_PASSWORD_QUERY);)
-		{
+				PreparedStatement updateStatement = con.prepareStatement(UPDATE_USER_PASSWORD_QUERY);) {
 			updateStatement.setString(1, newPassword);
 			updateStatement.setString(2, email);
 			int result = updateStatement.executeUpdate();
 			logger.info(result);
-			logger.info(email+" "+newPassword);
+			logger.info(email + " " + newPassword);
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public List<User> getAllUsers() {
+		List<User> userList = new ArrayList<>();
+		try (Connection conn = getConnection(); Statement selectStatement = conn.createStatement();) {
+			ResultSet rs = selectStatement.executeQuery(SELECT_ALL_USERS_QUERY);
+
+			while (rs.next()) {
+				Integer idFromQquery = Integer.valueOf(rs.getString("id"));
+				Role roleFromQuery = Role.valueOf(rs.getString("role"));
+				String fullNameFromQuery = rs.getString("full_name");
+				LocalDate dateOfBirthdayFromQuery = LocalDate.parse(rs.getString("date_of_birth"));
+				String emailFromQuery = rs.getString("email");
+				String passwordFromQuery = rs.getString("password");
+				LocalDateTime createdAtFromQuery = toLocalDateTime(rs.getString("created_at"));
+				LocalDateTime updatedAtFromQuery = toLocalDateTime(rs.getString("updated_at"));
+				User user = new User(idFromQquery, roleFromQuery, fullNameFromQuery, dateOfBirthdayFromQuery,
+						emailFromQuery, passwordFromQuery, createdAtFromQuery, updatedAtFromQuery);
+				userList.add(user);
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return userList;
 	}
 
 }

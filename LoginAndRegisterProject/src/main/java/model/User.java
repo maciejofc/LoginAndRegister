@@ -4,7 +4,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class User implements Serializable {
+	Logger logger = LogManager.getLogger("User");
 	Integer id;
 	Role role;
 	String fullName;
@@ -23,6 +27,8 @@ public class User implements Serializable {
 	}
 
 	public Role getRole() {
+		
+		
 		return role;
 	}
 
@@ -91,7 +97,32 @@ public class User implements Serializable {
 
 	public User(String fullName, LocalDate birthday, String email, String password, LocalDateTime createdAt,
 			LocalDateTime updatedAt) {
-		
+
+		this.fullName = fullName;
+		this.birthday = birthday;
+		this.email = email;
+		this.password = password;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
+	public User(Role role, String fullName, LocalDate birthday, String email, String password, LocalDateTime createdAt,
+			LocalDateTime updatedAt) {
+		super();
+		this.role = role;
+		this.fullName = fullName;
+		this.birthday = birthday;
+		this.email = email;
+		this.password = password;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
+	public User(Integer id, Role role, String fullName, LocalDate birthday, String email, String password,
+			LocalDateTime createdAt, LocalDateTime updatedAt) {
+		super();
+		this.id = id;
+		this.role = role;
 		this.fullName = fullName;
 		this.birthday = birthday;
 		this.email = email;
@@ -118,5 +149,5 @@ public class User implements Serializable {
 		builder.append("]");
 		return builder.toString();
 	}
-	
+
 }

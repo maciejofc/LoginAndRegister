@@ -9,13 +9,19 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%
 	
-	%>
-<!-- 	td- table data -->
-<!-- 	th - header cell -->
-<!-- 	tr- table row -->
-	<table>
+<c:set var ="userRole" value ="${user.role}"/>
+
+<c:choose>
+  <c:when test="${userRole == 'ADMIN'}">
+    ADMIN PAGE
+    <c:set var ="usersList" value ="${users}"/>
+    <c:forEach items = "${usersList}" var="singleUser">
+    ${singleUser}<br>
+    </c:forEach>
+  </c:when>
+  <c:when test="${userRole == 'MEMBER'}">
+   	<table>
 		<tr>
 			<th>Info</th>
 			<th>Data</th>
@@ -59,6 +65,13 @@ Want to change password ?
 	<input type = "submit" value = "Change password">
 	<br>
 	${changeStatement}  
-</form>
+</form>!
+  </c:when>
+  
+</c:choose>
+<!-- 	td- table data -->
+<!-- 	th - header cell -->
+<!-- 	tr- table row -->
+
 </body>
 </html>

@@ -12,8 +12,16 @@
 <body>
 
 <c:set var ="userName" value ="${user.fullName}"/>
-<c:out value= "${userName}"/>
-
+<c:set var ="userRole" value ="${user.role}"/>
+<c:choose>
+  <c:when test="${userRole == 'ADMIN'}">
+    ADMIN PAGE
+  </c:when>
+  <c:when test="${userRole == 'MEMBER'}">
+    MEMBER PAGE!!
+  </c:when>
+  
+</c:choose>
 
 <br>
 Link to Your Profile
